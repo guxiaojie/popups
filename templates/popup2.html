@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎁 Exclusive Offer! Get 10 Bonus Tokens! 🎁</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            color: #333;
+        }
+        .popup-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 350px;
+            position: relative;
+            animation: bounce 1s infinite alternate;
+        }
+        @keyframes bounce {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-5px); }
+        }
+        .popup-title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #007bff;
+        }
+        .popup-subtitle {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            margin-top: 10px;
+        }
+        .limited-time {
+            color: #ff4757;
+            font-size: 14px;
+            font-weight: bold;
+            margin-top: 5px;
+            animation: blink 1s infinite alternate;
+        }
+        @keyframes blink {
+            0% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
+        .input-box {
+            padding: 10px;
+            font-size: 16px;
+            margin-top: 10px;
+            width: 90%;
+            max-width: 250px;
+            border: 2px solid #007bff;
+            border-radius: 5px;
+        }
+        .submit-button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+            width: 100%;
+        }
+        .submit-button:hover {
+            background-color: #0056b3;
+        }
+        .secure {
+            font-size: 12px;
+            color: #777;
+            margin-top: 5px;
+        }
+        /* Super Small Close Button */
+        .close-button {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            font-size: 12px;
+            font-weight: bold;
+            background-color: #ff4757;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            line-height: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .close-button:hover {
+            background-color: #d63031;
+            transform: scale(1.2);
+        }
+        .message {
+            margin-top: 10px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="popup-box">
+        <button class="close-button" onclick="closePopup()">×</button>
+        <p class="popup-title">🎁 Get 10 Bonus Tokens! 🎁</p>
+        <p class="popup-subtitle">Enter your phone & WhatsApp number to claim your reward.</p>
+        <p class="limited-time">🔥 Limited Time Offer! 🔥</p>
+        <input type="tel" id="phoneInput" class="input-box" placeholder="Phone Number">
+        <input type="tel" id="whatsappInput" class="input-box" placeholder="WhatsApp Number">
+        <button class="submit-button" onclick="submitPhone()">Claim Now</button>
+        <p id="phoneMessage" class="message"></p>
+        <p class="secure">🔒 100% Safe. No spam, ever.</p>
+    </div>
+
+    <script>
+        async function submitPhone() {
+            var phone = document.getElementById("phoneInput").value;
+            var whatsapp = document.getElementById("whatsappInput").value;
+            var message = document.getElementById("phoneMessage");
+
+            if (!phone || !whatsapp) {
+                message.textContent = "❌ Please enter both phone and WhatsApp numbers.";
+                message.style.color = "red";
+                return;
+            }
+
+            try {
+                let response = await fetch("/save-phone", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ phone: phone, whatsapp: whatsapp }),
+                });
+
+                let result = await response.json();
+                if (response.ok) {
+                    message.textContent = "✅ Congrats! 10 tokens have been added!";
+                    message.style.color = "green";
+                    setTimeout(closePopup, 1500); // Close popup after success
+                } else {
+                    message.textContent = "❌ Error saving data.";
+                    message.style.color = "red";
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                message.textContent = "❌ Network error.";
+                message.style.color = "red";
+            }
+        }
+
+        function closePopup() {
+            // Hide the iframe from the parent page
+            var popupIframeContainer = window.parent.document.getElementById("popupIframeContainer");
+            if (popupIframeContainer) {
+                popupIframeContainer.style.display = "none";
+            }
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toggle iFrame</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .button {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 24px;
+            font-size: 18px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+        .iframe-container, .popup-iframe-container {
+            display: none;
+            margin-top: 20px;
+            width: 90%;
+            max-width: 800px;
+            height: 500px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid #ccc;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 12px;
+        }
+    </style>
+</head>
+<body>
+
+    <button class="button" onclick="toggleIframe()">Toggle iFrame</button>
+
+    <!-- Main iframe -->
+    <div class="iframe-container" id="iframeContainer">
+        <iframe id="mainIframe" src="http://127.0.0.1:8000/iframe" title="Main Embedded Page"></iframe>
+    </div>
+
+    <!-- Popup iframe for phone & WhatsApp input -->
+    <div class="popup-iframe-container" id="popupIframeContainer">
+        <iframe id="popupIframe" src="http://127.0.0.1:8000/popup2" title="Phone Number Popup"></iframe>
+    </div>
+
+    <script>
+        // Track which iframe is currently displayed
+        let iframeState = 0;
+
+        function toggleIframe() {
+            const iframeContainer = document.getElementById("iframeContainer");
+            const popupIframeContainer = document.getElementById("popupIframeContainer");
+
+            // Toggle between the two iframe states
+            if (iframeState === 0) {
+                iframeContainer.style.display = "block"; // Show the main iframe
+                popupIframeContainer.style.display = "none"; // Hide the popup iframe
+                iframeState = 1; // Switch to the next state
+            } else if (iframeState === 1) {
+                iframeContainer.style.display = "none"; // Hide the main iframe
+                popupIframeContainer.style.display = "block"; // Show the popup iframe
+                iframeState = 0; // Reset to the first state
+            }
+        }
+    </script>
+
+</body>
+</html>

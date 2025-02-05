@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mathos AI</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            height: 100vh;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background-color: #e8f4fd;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            border-right: 1px solid #ddd;
+        }
+
+        .sidebar h2 {
+            color: #007bff;
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar ul li {
+            margin-bottom: 15px;
+        }
+
+        .sidebar ul li a {
+            text-decoration: none;
+            font-size: 16px;
+            color: #007bff;
+        }
+
+        .sidebar ul li a:hover {
+            text-decoration: underline;
+        }
+
+        .history {
+            margin-top: auto;
+        }
+
+        .log-in {
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+        }
+
+        .log-in:hover {
+            background-color: #0056b3;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .response-area {
+            flex-grow: 1;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            overflow-y: auto;
+        }
+
+        .response-item {
+            margin-bottom: 15px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+
+        .response-item p {
+            margin: 0;
+        }
+
+        .response-item span {
+            display: block;
+            margin-top: 5px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        /* Input Area */
+        .input-area {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background-color: white;
+            padding: 10px;
+        }
+
+        .input-area textarea {
+            resize: none;
+            border: none;
+            font-size: 16px;
+            height: 80px;
+            outline: none;
+            padding: 10px;
+            flex-grow: 1;
+        }
+
+        .input-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .input-controls .send-button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .input-controls .send-button:hover {
+            background-color: #0056b3;
+        }
+
+        .input-controls .icons {
+            display: flex;
+            align-items: center;
+        }
+
+        .input-controls .icons img {
+            margin-right: 10px;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+        }
+
+        .input-controls .icons img:hover {
+            opacity: 0.8;
+        }
+        .iframe-container, .popup-iframe-container {
+            position: fixed; /* Float on top */
+            top: 50%; /* Center vertically */
+            left: 50%; /* Center horizontally */
+            transform: translate(-50%, -50%);
+            width: 80%;
+            max-width: 800px;
+            height: 500px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid #ccc;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+            background: white;
+            display: none; /* Initially hidden */
+            z-index: 1000; /* Ensure it appears above other content */
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 12px;
+        }
+    </style>
+</head>
+<body>
+
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>Mathos AI</h2>
+        <ul>
+            <li><a href="#">New Question</a></li>
+            <li><a href="#">PDF Homework Helper</a></li>
+            <li><a href="#">AI Tutor</a></li>
+            <li><a href="#">Calculator</a></li>
+            <li><a href="#">Graph Calculator</a></li>
+        </ul>
+        <div class="history">
+            <h3>History</h3>
+            <ul>
+                <li><a href="#">Today</a></li>
+                <li><a href="#">Yesterday</a></li>
+            </ul>
+        </div>
+        <a href="#" class="log-in">Log in here!</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+            <div class="iframe-container" id="iframeContainer">
+        <iframe id="mainIframe" src="http://127.0.0.1:8000/iframe" title="Main Embedded Page"></iframe>
+    </div>
+
+    <!-- Popup iframe for phone & WhatsApp input -->
+    <div class="popup-iframe-container" id="popupIframeContainer">
+        <iframe id="popupIframe" src="http://127.0.0.1:8000/popup2" title="Phone Number Popup"></iframe>
+    </div>
+        <!-- Response Area -->
+        <div class="response-area">
+            <div class="response-item">
+                <p>It seems like your message is incomplete. Could you please provide the math question or problem you'd like assistance with?</p>
+                <span>User: "a"</span>
+            </div>
+        </div>
+
+        <!-- Input Area -->
+        <div class="input-area">
+            <textarea placeholder="Type text, or paste / drag an image here. (Type '\' or '$' to insert formula)"></textarea>
+            <div class="input-controls">
+                <div class="icons">
+                    <img src="https://img.icons8.com/ios-filled/50/000000/camera.png" alt="Camera">
+                    <img src="https://img.icons8.com/ios-filled/50/000000/picture.png" alt="Image">
+                    <img src="https://img.icons8.com/ios-filled/50/000000/document.png" alt="Document">
+                </div>
+                <button class="send-button"  onclick="toggleIframe()">SEND</button>
+<!--                 <button class="button" onclick="toggleIframe()">Toggle iFrame</button>-->
+
+    <!-- Main iframe -->
+
+    <script>
+        // Track which iframe is currently displayed
+        let iframeState = 0;
+
+        function toggleIframe() {
+            const iframeContainer = document.getElementById("iframeContainer");
+            const popupIframeContainer = document.getElementById("popupIframeContainer");
+
+            // Toggle between the two iframe states
+            if (iframeState === 0) {
+                iframeContainer.style.display = "block"; // Show the main iframe
+                popupIframeContainer.style.display = "none"; // Hide the popup iframe
+                iframeState = 1; // Switch to the next state
+            } else if (iframeState === 1) {
+                iframeContainer.style.display = "none"; // Hide the main iframe
+                popupIframeContainer.style.display = "block"; // Show the popup iframe
+                iframeState = 0; // Reset to the first state
+            }
+        }
+    </script>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
