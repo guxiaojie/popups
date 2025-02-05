@@ -2,3 +2,4 @@ gradio_client
 fastapi
 uvicorn
 supabase
+jinja2
